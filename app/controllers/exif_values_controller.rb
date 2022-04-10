@@ -3,7 +3,7 @@
 class ExifValuesController < ApplicationController
   def index
     exif_values = fetch_request_exif_values
-                    .order(:created_at)
+                    .order(created_at: :desc)
 
     render json: exif_values.to_json
   end

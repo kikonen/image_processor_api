@@ -3,7 +3,7 @@
 class UsersController < ApplicationController
   def index
     users = fetch_request_users
-              .order(:created_at)
+              .order(created_at: :desc)
 
     render json: users.to_json
   end

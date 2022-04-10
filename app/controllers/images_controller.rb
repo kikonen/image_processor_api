@@ -3,7 +3,7 @@
 class ImagesController < ApplicationController
   def index
     images = fetch_request_images
-               .order(:created_at)
+               .order(created_at: :desc)
 
     render json: images.to_json
   end

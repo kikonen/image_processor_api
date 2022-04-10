@@ -3,7 +3,7 @@
 class UploadsController < ApplicationController
   def index
     uploads = fetch_request_uploads
-                .order(:created_at)
+                .order(created_at: :desc)
 
     render json: uploads.to_json
   end

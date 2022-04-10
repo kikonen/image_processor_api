@@ -2,5 +2,5 @@
 
 class Image < ApplicationRecord
   belongs_to :upload
-  has_many :exif_values, dependent: :destroy
+  has_many :exif_values, -> { order(:key) }, dependent: :destroy
 end
