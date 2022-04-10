@@ -3,27 +3,13 @@
 class TestsController < ApplicationController
 
   def token
-    secret = Secret['JWT_KEY']
-
-    user = User.find(params[:id])
-
-    data = {
-      user: user.id,
-      exp: AuthorizationSupport::TOKEN_EXPIRE.from_now.to_i,
-    }
-    jwt_token = JWT.encode(data, secret)
+    jwt_token = Token.create_user_token(params[:id])
 
     render json: { token: jwt_token }
   end
 
   def system_token
-    secret = Secret['JWT_KEY']
-
-    data = {
-      system: true,
-      exp: AuthorizationSupport::TOKEN_EXPIRE.from_now.to_i,
-    }
-    jwt_token = JWT.encode(data, secret)
+    jwt_token = Token.create_system_token
 
     render json: { token: jwt_token }
   end

@@ -54,7 +54,6 @@ class ExifValuesController < ApplicationController
 
   def fetch_request_exif_values
     ExifValue
-      .joins(:upload)
       .where(image: fetch_request_image)
   end
 

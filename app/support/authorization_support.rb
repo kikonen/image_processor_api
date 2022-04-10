@@ -2,7 +2,6 @@
 
 module AuthorizationSupport
   HEADER_BEARER = 'BEARER'
-  TOKEN_EXPIRE = 1.day
 
   SYSTEM_USER = User.new(
     id: '00000000-0000-0000-0000-000000000000',
@@ -22,12 +21,8 @@ module AuthorizationSupport
 
   def fetch_request_jwt
     @request_jwt ||= begin
-      secret = Secret['JWT_KEY']
       jwt_token = request.headers[HEADER_BEARER]
-      data = JWT.decode(jwt_token, secret)
-      Rails.logger.info(data)
-      decoded = data[0]
-      decoded.symbolize_keys!
+      Token.parse_token(jwt_token)
     end
   end
 
