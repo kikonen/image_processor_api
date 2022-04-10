@@ -33,11 +33,10 @@ class ImagesController < ApplicationController
 
     image_data = params
                    .require(:image)
-                   .permit(:url)
+                   .permit(:status, :mime_type)
 
     image.update!(image_data)
-
-    ImageFetchJob.perform_later(image_id: image)
+    image.reload
 
     render json: image.to_json
   end

@@ -31,6 +31,7 @@ class UploadsController < ApplicationController
     upload = fetch_request_upload
 
     upload.update!(upload_data)
+    upload.reload
 
     render json: upload.to_json
   end

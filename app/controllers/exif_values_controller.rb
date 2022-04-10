@@ -34,6 +34,7 @@ class ExifValuesController < ApplicationController
                         .permit(:key, :value)
 
     exif_value.update!(exif_value_data)
+    exif_value.reload
 
     render json: exif_value.to_json
   end

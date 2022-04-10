@@ -31,6 +31,7 @@ class UsersController < ApplicationController
 
     user = fetch_request_user
     user.update!(user_data)
+    user.reload
 
     render json: user.to_json
   end

@@ -5,6 +5,7 @@ class CreateImages < ActiveRecord::Migration[7.0]
     create_table :images, id: :uuid do |t|
       t.string :url, null: false
       t.string :status, null: false
+      t.string :mime_type
 
       t.timestamps default: -> { 'now()' }, null: false
     end
