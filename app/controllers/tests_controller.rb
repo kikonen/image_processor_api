@@ -20,7 +20,7 @@ class TestsController < ActionController::API
     secret = Secret['JWT_KEY']
 
     data = {
-      user: AuthorizationSupport::SYSTEM,
+      system: true,
       exp: AuthorizationSupport::TOKEN_EXPIRE.from_now.to_i,
     }
     jwt_token = JWT.encode(data, secret)

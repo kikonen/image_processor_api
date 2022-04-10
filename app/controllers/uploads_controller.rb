@@ -2,13 +2,15 @@
 
 class UploadsController < ApplicationController
   def index
-    uploads = Upload.all
+    uploads = Upload.where(user: current_user)
 
     render json: uploads.to_json
   end
 
   def show
-    upload = Upload.find(params[:id])
+    upload = Upload.find(
+      params[:id],
+      conditions: ['user_id = ?', current_user.id])
 
     render json: upload.to_json
   end
