@@ -11,7 +11,7 @@ class UploadsController < ApplicationController
   def show
     upload = fetch_request_upload
 
-    render json: upload.to_json
+    render json: upload.to_json(include: :images)
   end
 
   def create

@@ -11,7 +11,7 @@ class ImagesController < ApplicationController
   def show
     image = fetch_request_image
 
-    render json: image.to_json
+    render json: image.to_json(include: :exif_values)
   end
 
   def create
