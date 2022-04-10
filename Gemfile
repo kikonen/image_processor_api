@@ -37,7 +37,7 @@ gem "redis", "~> 4.0"
 #gem "kredis"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
@@ -50,8 +50,6 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
-
-gem 'resque'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -74,4 +72,13 @@ group :test do
   #gem "capybara"
   #gem "selenium-webdriver"
   #gem "webdrivers"
+end
+
+
+gem 'resque'
+gem 'jwt'
+gem 'oj'
+
+group :development, :test do
+  gem 'amazing_print'
 end

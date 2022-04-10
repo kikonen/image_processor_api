@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module UpdatedAtTrigger
   def add_updated_at_trigger(table)
     execute <<-EOF
