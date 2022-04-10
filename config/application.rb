@@ -21,5 +21,7 @@ module ImageProcessorApi
 
     config.api_only = true
     config.debug_exception_response_format = :api
+
+    config.active_job.queue_adapter = :resque
   end
 end

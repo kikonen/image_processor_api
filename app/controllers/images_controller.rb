@@ -23,6 +23,8 @@ class ImagesController < ApplicationController
     image = Image.new(image_data.merge(upload: upload, status: :new))
     image.save!
 
+    ImageFetchJob.perform_later(image_id: image)
+
     render json: image.to_json
   end
 
@@ -35,6 +37,8 @@ class ImagesController < ApplicationController
 
     image.update!(image_data)
 
+    ImageFetchJob.perform_later(image_id: image)
+
     render json: image.to_json
   end
 
@@ -45,6 +49,16 @@ class ImagesController < ApplicationController
 
     head :no_content
   end
+
+  def fetch
+    image = fetch_request_image
+
+    ImageFetchJob.perform_later(image_id: image)
+
+    render json: image.to_json
+  end
+
+  private
 
   def fetch_request_image
     fetch_request_images

@@ -12,6 +12,10 @@ Rails.application.routes.draw do
   resources :images do
     resources :exif_values do
     end
+
+    member do
+      post :fetch
+    end
   end
 
   resources :exif_values do
