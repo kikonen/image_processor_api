@@ -17,12 +17,18 @@ class UploadsController < ApplicationController
   def create
     upload_data = params
                     .require(:upload)
-                    .permit(:images)
+                    .permit(images: [:url])
 
-    upload = Upload.new(upload_data.merge(user: current_user))
+    upload_data[:images] = upload_data[:images]&.map do |img_data|
+      Image.new({status: :new}.merge!(img_data))
+    end
+
+    upload = Upload.new({ user: current_user }.merge!(upload_data))
     upload.save!
 
-    render json: upload.to_json
+    upload = Upload.where(id: upload.id).includes(:images).first
+
+    render json: upload.to_json(include: :images)
   end
 
   def update

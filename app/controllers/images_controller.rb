@@ -20,7 +20,7 @@ class ImagesController < ApplicationController
                    .require(:image)
                    .permit(:url)
 
-    image = Image.new(image_data.merge(upload: upload, status: :new))
+    image = Image.new({ upload: upload, status: :new }.merge!(image_data))
     image.save!
 
     ImageFetchJob.perform_later(image_id: image)
