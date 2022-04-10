@@ -35,9 +35,11 @@ class ImagesController < ApplicationController
                    .require(:image)
                    .permit(:status, :mime_type, exif_values: [:key, :value])
 
-    # NOTE KI Override exif values to refresh them
-    image_data[:exif_values] = image_data[:exif_values]&.map do |exif_data|
-      ExifValue.new(exif_data)
+    if image_data.key?(:exif_values)
+      # NOTE KI Override exif values to refresh them
+      image_data[:exif_values] = image_data[:exif_values]&.map do |exif_data|
+        ExifValue.new(exif_data)
+      end
     end
 
     image.update!(image_data)

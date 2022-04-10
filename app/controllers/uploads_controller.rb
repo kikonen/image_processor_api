@@ -32,7 +32,16 @@ class UploadsController < ApplicationController
   end
 
   def update
-    upload_data = params.require(:upload).permit(:images)
+    upload_data = params
+                    .require(:upload)
+                    .permit(images: [:url])
+
+    if upload_data.key?(:images)
+      # NOTE KI override images to refrsh them
+      upload_data[:images] = upload_data[:images]&.map do |img_data|
+        Image.new({status: :new}.merge!(img_data))
+      end
+    end
 
     upload = fetch_request_upload
 
