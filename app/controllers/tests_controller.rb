@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TestsController < ActionController::Base
+class TestsController < ActionController::API
 
   def token
     secret = Secret['JWT_KEY']
