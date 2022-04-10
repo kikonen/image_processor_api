@@ -3,6 +3,7 @@
 module AuthorizationSupport
   HEADER_BEARER = 'BEARER'
   TOKEN_EXPIRE = 1.day
+  SYSTEM = 'SYSTEM'
 
   def require_authorization
     check_jwt_token
@@ -10,6 +11,7 @@ module AuthorizationSupport
 
   def check_jwt_token
     jwt = fetch_request_jwt
+    user = User.find(jwt[:user]) unless jwt[:user] == SYSTEM
     dt = Time.at(jwt[:exp])
     Rails.logger.info "Date: #{dt}"
   end
