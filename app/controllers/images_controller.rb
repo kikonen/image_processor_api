@@ -33,12 +33,18 @@ class ImagesController < ApplicationController
 
     image_data = params
                    .require(:image)
-                   .permit(:status, :mime_type)
+                   .permit(:status, :mime_type, exif_values: [:key, :value])
+
+    # NOTE KI Override exif values to refresh them
+    image_data[:exif_values] = image_data[:exif_values]&.map do |exif_data|
+      ExifValue.new(exif_data)
+    end
 
     image.update!(image_data)
-    image.reload
 
-    render json: image.to_json
+    image = Image.where(id: image.id).includes(:exif_values).first
+
+    render json: image.to_json(include: :exif_values)
   end
 
   def destroy
