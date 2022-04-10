@@ -2,6 +2,7 @@
 
 module AuthorizationSupport
   HEADER_BEARER = 'BEARER'
+  TOKEN_EXPIRE = 1.day
 
   def require_authorization
     check_jwt_token
@@ -9,14 +10,18 @@ module AuthorizationSupport
 
   def check_jwt_token
     jwt = fetch_request_jwt
+    dt = Time.at(jwt[:exp])
+    Rails.logger.info "Date: #{dt}"
   end
 
   def fetch_request_jwt
-    secret = Secret['JWT_KEY']
-    jwt_token = request.headers[HEADER_BEARER]
-    data = JWT.decode(jwt_token, secret)
-    ap data
-    decoded = data[0]
-    decoded.symbolize_keys!
+    @request_jwt ||= begin
+      secret = Secret['JWT_KEY']
+      jwt_token = request.headers[HEADER_BEARER]
+      data = JWT.decode(jwt_token, secret)
+      Rails.logger.info(data)
+      decoded = data[0]
+      decoded.symbolize_keys!
+    end
   end
 end

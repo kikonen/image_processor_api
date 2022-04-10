@@ -7,7 +7,7 @@ class TestsController < ActionController::Base
 
     data = {
       user: 'xxx',
-      expire: 1.hour.from_now,
+      exp: AuthorizationSupport::TOKEN_EXPIRE.from_now.to_i,
     }
     jwt_token = JWT.encode(data, secret)
 
