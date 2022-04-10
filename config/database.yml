@@ -4,8 +4,8 @@ default: &default
   host: <%= ENV['DB_HOST'] %>
   timeout: 5000
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= Rails.application.credentials.dig(:db, :user) %>
-  password: <%= Rails.application.credentials.dig(:db, :password) %>
+  username: <%= Secret['POSTGRES_USER'] %>
+  password: <%= Secret['POSTGRES_PASSWORD'] %>
 
 development:
   <<: *default
