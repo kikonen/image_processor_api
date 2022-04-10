@@ -4,7 +4,7 @@ module AuthorizationSupport
   HEADER_BEARER = 'BEARER'
 
   SYSTEM_USER = User.new(
-    id: '00000000-0000-0000-0000-000000000000',
+    id: User::SYSTEM_ID,
     email: 'system@local')
 
 
@@ -30,7 +30,7 @@ module AuthorizationSupport
     @current_user ||= begin
       jwt = fetch_request_jwt
       if jwt[:system]
-        SYSTEM
+        SYSTEM_USER
       else
         User.find(fetch_request_jwt[:user])
       end

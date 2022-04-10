@@ -50,6 +50,10 @@ class UploadsController < ApplicationController
   end
 
   def fetch_request_uploads
-    Upload.where(user: current_user)
+    if current_user.normal_user?
+      Upload.where(user: current_user)
+    else
+      Upload
+    end
   end
 end

@@ -17,8 +17,8 @@ class ImagesController < ApplicationController
   def create
     upload = Upload.find(params[:upload_id])
     image_data = params
-                    .require(:image)
-                    .permit(:url)
+                   .require(:image)
+                   .permit(:url)
 
     image = Image.new(image_data.merge(upload: upload, status: :new))
     image.save!
@@ -53,7 +53,7 @@ class ImagesController < ApplicationController
   def fetch
     image = fetch_request_image
 
-    ImageFetchJob.perform_later(image_id: image)
+    ImageFetchJob.perform_later(image_id: image.id)
 
     render json: image.to_json
   end
@@ -67,8 +67,12 @@ class ImagesController < ApplicationController
   end
 
   def fetch_request_images
-    Image
-      .joins(:upload)
-      .where(upload: { user: current_user })
+    if current_user.normal_user?
+      Image
+        .joins(:upload)
+        .where(upload: { user: current_user })
+    else
+      Image.all
+    end
   end
 end

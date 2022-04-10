@@ -81,4 +81,7 @@ gem 'oj'
 
 group :development, :test do
   gem 'amazing_print'
+
+  gem 'pry-rails'
+  gem 'pry-byebug'
 end
