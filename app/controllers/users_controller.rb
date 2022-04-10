@@ -2,7 +2,8 @@
 
 class UsersController < ApplicationController
   def index
-    users = User.all.order(:created_at)
+    users = fetch_request_users
+              .order(:created_at)
 
     render json: users.to_json
   end
@@ -14,6 +15,11 @@ class UsersController < ApplicationController
   end
 
   def create
+    if current_user.normal_user?
+      render json: { message: "no access" }, status: :forbidden
+      return
+    end
+
     user_data = params
                   .require(:user)
                   .permit(:email)
@@ -44,6 +50,16 @@ class UsersController < ApplicationController
   end
 
   def fetch_request_user
-    User.find(params[:id])
+    fetch_request_users
+      .where(id: params[:id])
+      .first
+  end
+
+  def fetch_request_users
+    if current_user.normal_user?
+      User.where(id: current_user.id)
+    else
+      User
+    end
   end
 end
