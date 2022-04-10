@@ -28,6 +28,10 @@ class UploadsController < ApplicationController
 
     upload = Upload.where(id: upload.id).includes(:images).first
 
+    upload.images.each do |image|
+      ImageFetchJob.perform_later(image_id: image.id)
+    end
+
     render json: upload.to_json(include: :images)
   end
 
@@ -48,7 +52,13 @@ class UploadsController < ApplicationController
     upload.update!(upload_data)
     upload.reload
 
-    render json: upload.to_json
+    upload = Upload.where(id: upload.id).includes(:images).first
+
+    upload.images.each do |image|
+      ImageFetchJob.perform_later(image_id: image.id)
+    end
+
+    render json: upload.to_json(include: :images)
   end
 
   def destroy
