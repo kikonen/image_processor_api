@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TestsController < ActionController::API
+class TestsController < ApplicationController
 
   def token
     secret = Secret['JWT_KEY']
@@ -26,5 +26,14 @@ class TestsController < ActionController::API
     jwt_token = JWT.encode(data, secret)
 
     render json: { token: jwt_token }
+  end
+
+  def routes
+    data = `rails routes`
+    render plain: data
+  end
+
+  def require_authorization
+    super unless Util::DEV_ENV
   end
 end

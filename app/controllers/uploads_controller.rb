@@ -2,15 +2,14 @@
 
 class UploadsController < ApplicationController
   def index
-    uploads = Upload.where(user: current_user)
+    uploads = fetch_request_uploads
+                .order(:created_at)
 
     render json: uploads.to_json
   end
 
   def show
-    upload = Upload.where(
-      id: params[:id],
-      user: current_user)
+    upload = fetch_request_upload
 
     render json: upload.to_json
   end
@@ -29,9 +28,7 @@ class UploadsController < ApplicationController
   def update
     upload_data = params.require(:upload).permit(:images)
 
-    upload = Upload.where(
-      id: params[:id],
-      user: current_user)
+    upload = fetch_request_upload
 
     upload.update!(upload_data)
 
@@ -39,13 +36,20 @@ class UploadsController < ApplicationController
   end
 
   def destroy
-    upload = Upload.where(
-      id: params[:id],
-      user: current_user)
+    upload = fetch_request_upload
 
     upload.destroy!
 
     head :no_content
   end
 
+  def fetch_request_upload
+    fetch_request_uploads
+      .where(id: params[:id])
+      .first
+  end
+
+  def fetch_request_uploads
+    Upload.where(user: current_user)
+  end
 end

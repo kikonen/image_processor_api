@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     collection do
       get :token
       get :system_token
+      get :routes
     end
   end
 
