@@ -8,33 +8,41 @@ class UploadsController < ApplicationController
   end
 
   def show
-    upload = Upload.find(
-      params[:id],
-      conditions: ['user_id = ?', current_user.id])
+    upload = Upload.where(
+      id: params[:id],
+      user: current_user)
 
     render json: upload.to_json
   end
 
   def create
-    upload_data = params.require(:upload).permit(:email)
+    upload_data = params
+                    .require(:upload)
+                    .permit(:images)
 
-    upload = Upload.new(upload_data)
+    upload = Upload.new(upload_data.merge(user: current_user))
     upload.save!
 
     render json: upload.to_json
   end
 
   def update
-    upload_data = params.require(:upload).permit(:email)
+    upload_data = params.require(:upload).permit(:images)
 
-    upload = Upload.find(params[:id])
+    upload = Upload.where(
+      id: params[:id],
+      user: current_user)
+
     upload.update!(upload_data)
 
     render json: upload.to_json
   end
 
   def destroy
-    upload = Upload.find(params[:id])
+    upload = Upload.where(
+      id: params[:id],
+      user: current_user)
+
     upload.destroy!
 
     head :no_content
