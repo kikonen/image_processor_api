@@ -6,6 +6,8 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+require File.expand_path('../../app/lib/thread_log_formatter', __FILE__)
+
 module ImageProcessorApi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
