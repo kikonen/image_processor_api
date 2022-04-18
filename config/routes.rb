@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
   resources :tests, only: [] do
     collection do
+      get :users
       get :token
       get :system_token
       get :routes
