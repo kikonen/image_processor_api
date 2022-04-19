@@ -6,7 +6,8 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-require File.expand_path('../../app/lib/thread_log_formatter', __FILE__)
+require_relative '../app/lib/thread_log_formatter'
+require_relative '../app/lib/local_store'
 
 module ImageProcessorApi
   class Application < Rails::Application
@@ -25,5 +26,7 @@ module ImageProcessorApi
     config.debug_exception_response_format = :api
 
     config.active_job.queue_adapter = :resque
+
+    config.middleware.use LocalStore
   end
 end
