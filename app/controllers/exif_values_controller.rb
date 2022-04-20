@@ -59,16 +59,14 @@ class ExifValuesController < ApplicationController
   end
 
   def fetch_request_image
+    rel = Image.where(id: params[:image_id])
+
     if current_user.normal_user?
-      Image
-        .joins(:upload)
-        .where(upload: { user: current_user })
-        .where(id: params[:image_id])
-        .first
-    else
-      Image
-        .where(id: params[:image_id])
-        .first
+      rel = rel
+              .joins(:upload)
+              .where(upload: { user: current_user })
     end
+
+    rel.first
   end
 end

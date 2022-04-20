@@ -74,12 +74,12 @@ class ImagesController < ApplicationController
   end
 
   def fetch_request_images
+    rel = Image.all
     if current_user.normal_user?
-      Image
-        .joins(:upload)
-        .where(upload: { user: current_user })
-    else
-      Image.all
+      rel = rel
+              .joins(:upload)
+              .where(upload: { user: current_user })
     end
+    rel
   end
 end

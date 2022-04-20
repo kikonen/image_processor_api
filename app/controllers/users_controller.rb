@@ -56,10 +56,10 @@ class UsersController < ApplicationController
   end
 
   def fetch_request_users
+    rel = User.all
     if current_user.normal_user?
-      User.where(id: current_user.id)
-    else
-      User
+      rel = rel.where(id: current_user.id)
     end
+    rel
   end
 end

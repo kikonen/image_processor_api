@@ -76,10 +76,10 @@ class UploadsController < ApplicationController
   end
 
   def fetch_request_uploads
+    rel = Upload.all
     if current_user.normal_user?
-      Upload.where(user: current_user)
-    else
-      Upload
+      rel = rel.where(user: current_user)
     end
+    rel
   end
 end
