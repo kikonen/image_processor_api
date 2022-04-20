@@ -3,15 +3,6 @@
 module AuthorizationSupport
   HEADER_BEARER = 'BEARER'
 
-  def system_user
-    @system_user ||= begin
-      User.new(
-        id: User::SYSTEM_ID,
-        email: 'system@local')
-    end
-  end
-
-
   def require_authorization
     check_jwt_token
   end
@@ -34,7 +25,7 @@ module AuthorizationSupport
     @current_user ||= begin
       jwt = fetch_request_jwt
       if jwt[:system]
-        system_user
+        User.system_user
       else
         User.find(fetch_request_jwt[:user])
       end

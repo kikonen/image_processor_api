@@ -13,4 +13,12 @@ class User < ApplicationRecord
   def normal_user?
     !system_user?
   end
+
+  def self.system_user
+    @system_user ||= begin
+      User.new(
+        id: User::SYSTEM_ID,
+        email: 'system@local')
+    end
+  end
 end
