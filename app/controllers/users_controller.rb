@@ -14,6 +14,15 @@ class UsersController < ApplicationController
     render json: user.to_json
   end
 
+  def by_email
+    email = params[:email]
+    user = fetch_request_users
+             .where(email: email)
+             .first
+
+    render json: user.to_json
+  end
+
   def create
     if current_user.normal_user?
       render json: { message: "no access" }, status: :forbidden
