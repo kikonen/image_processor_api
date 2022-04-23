@@ -20,7 +20,14 @@ class ImagesController < ApplicationController
                    .require(:image)
                    .permit(:url)
 
-    image = Image.new({ upload: upload, status: :new }.merge!(image_data))
+    # NOTE KI exif_values != exif_values_attributes
+    image_data[:exif_values_attributes] = image_data[:exif_values] || []
+    image_data.delete :exif_values
+
+    image = Image.new(image_data)
+    image.upload = upload
+    image.status = :new
+
     image.save!
     image.reload
 
@@ -37,6 +44,10 @@ class ImagesController < ApplicationController
                    .require(:image)
                    .permit(:status, :mime_type, exif_values: [:key, :value])
 
+    # NOTE KI exif_values != exif_values_attributes
+    image_data[:exif_values_attributes] = image_data[:exif_values] || []
+    image_data.delete :exif_values
+
     image.update!(image_data)
     image.reload
 
@@ -50,8 +61,6 @@ class ImagesController < ApplicationController
 
     head :no_content
   end
-
-  private
 
   def fetch
     image = fetch_request_image

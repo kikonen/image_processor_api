@@ -19,10 +19,17 @@ class UploadsController < ApplicationController
                     .require(:upload)
                     .permit(images: [:url])
 
-    binding.pry
-    upload = Upload.new({ user: current_user }.merge!(upload_data))
-    upload.save!
+    # NOTE KI images != image_attributes
+    upload_data[:images_attributes] = upload_data[:images] || []
+    upload_data.delete :images
+    upload_data[:images_attributes]&.each do |data|
+      data[:status] = :new
+    end
 
+    upload = Upload.new(upload_data)
+    upload.user = current_user
+
+    upload.save!
     upload.reload
 
     upload.images.each do |image|
@@ -39,6 +46,13 @@ class UploadsController < ApplicationController
     upload_data = params
                     .require(:upload)
                     .permit(images: [:url])
+
+    # NOTE KI images != image_attributes
+    upload_data[:images_attributes] = upload_data[:images] || []
+    upload_data.delete :images
+    upload_data[:images_attributes]&.each do |data|
+      data[:status] = :new
+    end
 
     upload.update!(upload_data)
     upload.reload

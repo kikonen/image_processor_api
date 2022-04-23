@@ -20,8 +20,11 @@ class ExifValuesController < ApplicationController
                         .require(:exif_value)
                         .permit(:key, :value)
 
-    exif_value = ExifValue.new({ image: image }.merge!(exif_value_data))
+    exif_value = ExifValue.new(exif_value_data)
+    exif_value.image = image
+
     exif_value.save!
+    exif_value.reload
 
     render json: exif_value.to_json
   end
