@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module AuthorizationSupport
-  HEADER_HEADER_AUTHORIZATON = 'AUTHORIZATION'
+  HEADER_AUTHORIZATON = 'AUTHORIZATION'
 
   def require_authorization
     check_jwt_token

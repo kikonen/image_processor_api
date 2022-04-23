@@ -19,46 +19,35 @@ class UploadsController < ApplicationController
                     .require(:upload)
                     .permit(images: [:url])
 
-    upload_data[:images] = upload_data[:images]&.map do |img_data|
-      Image.new({status: :new}.merge!(img_data))
-    end
-
+    binding.pry
     upload = Upload.new({ user: current_user }.merge!(upload_data))
     upload.save!
 
-    upload = Upload.where(id: upload.id).includes(:images).first
+    upload.reload
 
     upload.images.each do |image|
       ImageFetchJob.perform_later(image_id: image.id)
     end
 
-    render json: upload.to_json(include: :images)
+    render json: upload
   end
 
   def update
+    # NOTE KI override images to refresh them
+    upload = fetch_request_upload
+
     upload_data = params
                     .require(:upload)
                     .permit(images: [:url])
 
-    if upload_data.key?(:images)
-      # NOTE KI override images to refrsh them
-      upload_data[:images] = upload_data[:images]&.map do |img_data|
-        Image.new({status: :new}.merge!(img_data))
-      end
-    end
-
-    upload = fetch_request_upload
-
     upload.update!(upload_data)
     upload.reload
-
-    upload = Upload.where(id: upload.id).includes(:images).first
 
     upload.images.each do |image|
       ImageFetchJob.perform_later(image_id: image.id)
     end
 
-    render json: upload.to_json(include: :images)
+    render json: upload
   end
 
   def destroy
@@ -68,6 +57,8 @@ class UploadsController < ApplicationController
 
     head :no_content
   end
+
+  private
 
   def fetch_request_upload
     fetch_request_uploads

@@ -22,31 +22,25 @@ class ImagesController < ApplicationController
 
     image = Image.new({ upload: upload, status: :new }.merge!(image_data))
     image.save!
+    image.reload
 
-    ImageFetchJob.perform_later(image_id: image)
+    ImageFetchJob.perform_later(image_id: image.id)
 
     render json: image.to_json
   end
 
   def update
+    # NOTE KI Override exif values to refresh them
     image = fetch_request_image
 
     image_data = params
                    .require(:image)
                    .permit(:status, :mime_type, exif_values: [:key, :value])
 
-    if image_data.key?(:exif_values)
-      # NOTE KI Override exif values to refresh them
-      image_data[:exif_values] = image_data[:exif_values]&.map do |exif_data|
-        ExifValue.new(exif_data)
-      end
-    end
-
     image.update!(image_data)
+    image.reload
 
-    image = Image.where(id: image.id).includes(:exif_values).first
-
-    render json: image.to_json(include: :exif_values)
+    render json: image
   end
 
   def destroy
@@ -56,6 +50,8 @@ class ImagesController < ApplicationController
 
     head :no_content
   end
+
+  private
 
   def fetch
     image = fetch_request_image

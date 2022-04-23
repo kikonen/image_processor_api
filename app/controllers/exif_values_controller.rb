@@ -47,6 +47,8 @@ class ExifValuesController < ApplicationController
     head :no_content
   end
 
+  private
+
   def fetch_request_exif_value
     fetch_request_exif_values
       .where(id: params[:id])

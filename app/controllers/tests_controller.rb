@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+#
+# Just temporary logic for testing
+# - Disabled from production via ALLOW_TESTS ENV
+#
 class TestsController < ApplicationController
 
   def users

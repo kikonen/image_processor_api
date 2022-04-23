@@ -35,6 +35,7 @@ class UsersController < ApplicationController
 
     user = User.new(user_data)
     user.save!
+    user.reload
 
     render json: user.to_json
   end
@@ -57,6 +58,8 @@ class UsersController < ApplicationController
 
     head :no_content
   end
+
+  private
 
   def fetch_request_user
     fetch_request_users
