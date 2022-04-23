@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module AuthorizationSupport
-  HEADER_BEARER = 'BEARER'
+  HEADER_HEADER_AUTHORIZATON = 'AUTHORIZATION'
 
   def require_authorization
     check_jwt_token
@@ -16,7 +16,7 @@ module AuthorizationSupport
 
   def fetch_request_jwt
     @request_jwt ||= begin
-      jwt_token = request.headers[HEADER_BEARER]
+      jwt_token = request.headers[HEADER_AUTHORIZATON]
       Token.parse_token(jwt_token)
     end
   end
